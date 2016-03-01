@@ -63,11 +63,11 @@ class MoviesController < ApplicationController
   
   def search_directors
     @movie = Movie.find(params[:movie_id])
-    if @movie.director.nil? || @movie.director == ""
-      redirect_to root_path
+    if @movie.director.nil? || @movie.director.empty?
+      flash[:notice] = "'#{@movie.title}' has no director info."
+      redirect_to root_path and return
     else
-      @movies = Movie.find_by_director(@movie.director)
-      render :template => "movies/index"
+      @movies = Movie.where(director: @movie.director)
     end
   end
 
